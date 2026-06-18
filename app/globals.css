@@ -25,8 +25,24 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.inventory-table {
+}
+
 .inventory-row {
    display: flex;
-   flex-direction: horizontal;
+   flex-direction: row;
 
+   margin: 5px;
+
+   border-style: solid;
+   border-color: black;
+   border-width: 2px;
+   border-radius: 5px;
+
+   box-shadow: -1px 1px 5px rgb(0 0 0 / 20%);
 }
+
+.inventory-item {
+  margin: 5px;
+}
+

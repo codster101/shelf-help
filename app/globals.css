@@ -19,6 +19,13 @@
   }
 }
 
+.title {
+  font-style: bold;
+  font-size: 32;
+  margin-left: 5%;
+  
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -26,6 +33,12 @@ body {
 }
 
 .inventory-table {
+   margin: 0% 10% 0% 10%;
+}
+
+.table-header {
+   font-weight: bold;
+   background-color: gray;
 }
 
 .inventory-row {
@@ -42,7 +55,8 @@ body {
    box-shadow: -1px 1px 5px rgb(0 0 0 / 20%);
 }
 
-.inventory-item {
-  margin: 5px;
+.inventory-field {
+  width: 500px;
+
 }
 

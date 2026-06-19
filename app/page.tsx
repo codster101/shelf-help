@@ -29,6 +29,7 @@ export default async function Home() {
   return (
     <>
       <h1 className="title">Shelf-Help</h1>
+      <button className="right button-main">New Order</button>
       <div className="inventory-table">
         <div className="inventory-row table-header">
           <p className="inventory-field">Product</p>
@@ -36,7 +37,7 @@ export default async function Home() {
           <p className="inventory-field">Quantity</p>
         </div>
         {data?.map((row) => (
-          <div key={row.id} className="inventory-row">
+          <div key={row.id} className="inventory-row inventory-entry">
             <p className="inventory-field">{row.product}</p>
             <p className="inventory-field">{row.price}</p>
             <input className="inventory-field" type="number" defaultValue={row.quantity == null ? 0 : row.quantity} />

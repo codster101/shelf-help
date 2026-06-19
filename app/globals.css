@@ -1,8 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #312A33;
+
   --foreground: #171717;
+  --lavender:   #F1E4F3;
+  --blossom:    #F4BBD3;
+  --pink:       #F686BD;
+  --rosy:       #FE5D9F;
+
+  --primary:    #D69DB5;
+  --card:       #48404D;
 }
 
 @theme inline {
@@ -14,8 +22,12 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --background: #d6d2d2;
+  --foreground: #171717;
+  --lavender:   #F1E4F3;
+  --blossom:    #F4BBD3;
+  --pink:       #F686BD;
+  --rosy:       #FE5D9F;
   }
 }
 
@@ -36,9 +48,26 @@ body {
    margin: 0% 10% 0% 10%;
 }
 
+button {
+   /* background-color: var(--pink); */
+   background-color: var(--primary);
+   color: var(--lavender);
+   font-weight: bold;
+   width: 200px;
+   align-self: end;
+
+   margin: 20px;
+
+   border-style: solid;
+   border-radius: 5px;
+   border-color: var(--lavender);
+
+}
+
+
 .table-header {
    font-weight: bold;
-   background-color: gray;
+   border-style: none;
 }
 
 .inventory-row {
@@ -46,13 +75,21 @@ body {
    flex-direction: row;
 
    margin: 5px;
+   padding: 10px 5px;
 
-   border-style: solid;
-   border-color: black;
-   border-width: 2px;
-   border-radius: 5px;
+
+   color: var(--lavender);
+}
+
+.inventory-entry {
+   /* border-style: solid; */
+   /* border-color: var(--lavender); */
+   /* border-width: .5px; */
+   border-radius: 10px;
 
    box-shadow: -1px 1px 5px rgb(0 0 0 / 20%);
+   
+   background-color: var(--card);
 }
 
 .inventory-field {
@@ -60,3 +97,6 @@ body {
 
 }
 
+input[type="number"] {
+   appearance: textfield;
+}

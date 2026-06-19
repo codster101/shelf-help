@@ -27,14 +27,22 @@ export default async function Home() {
   }
 
   return (
-    <div className="inventory-table">
-      {data?.map((row) => (
-        <div key={row.id} className="inventory-row">
-          <p>{row.product}</p>
-          <p>{row.price}</p>
-          <p>{row.quantity}</p>
+    <>
+      <h1 className="title">Shelf-Help</h1>
+      <div className="inventory-table">
+        <div className="inventory-row table-header">
+          <p className="inventory-field">Product</p>
+          <p className="inventory-field">Price</p>
+          <p className="inventory-field">Quantity</p>
         </div>
-      ))}
-    </div>
+        {data?.map((row) => (
+          <div key={row.id} className="inventory-row">
+            <p className="inventory-field">{row.product}</p>
+            <p className="inventory-field">{row.price}</p>
+            <input className="inventory-field" type="number" defaultValue={row.quantity == null ? 0 : row.quantity} />
+          </div>
+        ))}
+      </div>
+    </>
   );
 }

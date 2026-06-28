@@ -1,6 +1,7 @@
-import Image from "next/image";
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { Database, Tables } from '../database.types';
+import { Database } from '../database.types';
+import NewOrderButton from './new_order_button';
+import OrderMenu from './order_menu';
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
@@ -18,6 +19,10 @@ if (supabaseUrl != null && supabaseKey != null) {
   console.error("Supabase connection info could not be  found for url : " + supabaseUrl);
 }
 
+function setOrderMenuOpen(shouldOpen: boolean) {
+
+}
+
 export default async function Home() {
   const { data, error } = await supabase.from("Inventory").select("*");
 
@@ -26,10 +31,13 @@ export default async function Home() {
     return <div>Error Loading Inventory</div>
   }
 
+  let showOrderMenu: boolean = false;
+
   return (
     <>
       <h1 className="title">Shelf-Help</h1>
-      <button className="right button-main">New Order</button>
+      <NewOrderButton showMenu={showOrderMenu} />
+      <OrderMenu isOpen={showOrderMenu} />
       <div className="inventory-table">
         <div className="inventory-row table-header">
           <p className="inventory-field">Product</p>

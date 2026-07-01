@@ -1,12 +1,8 @@
 'use client'
 
-import { useState } from 'react';
-
-export default function NewOrderButton({ showMenu }: { showMenu: boolean }) {
-
-	// const [isOrderMenuOpen, OpenOrderMenu] = useState(false);
+export default function NewOrderButton({ showMenu }: { showMenu: (isOpen: boolean) => void }) {
 
 	return (
-		<button className='right' onClick={() => { showMenu = !showMenu; console.log("Button Pressed: " + showMenu); }}>New Order</button>
+		<button className='right' onClick={() => { showMenu(true); }}>New Order</button>
 	);
 }

@@ -1,43 +1,23 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { Database } from '../database.types';
-import NewOrderButton from './new_order_button';
-import OrderMenu from './order_menu';
+import NewOrderWrapper from './new_order_wrapper';
+import { inventoryManager } from './inventory_manager';
+import ProductSelect from './product_select';
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-let supabase: SupabaseClient<Database>;
-if (supabaseUrl != null && supabaseKey != null) {
-  supabase = createClient<Database>(supabaseUrl, supabaseKey, {
-    global: {
-      fetch: (url, options) => fetch(url, { ...options, cache: "no-store" }),
-    },
-  });
-  const { data, error } = await supabase.from("Inventory").select("id");
-  console.log(data);
-  console.log(error);
-} else {
-  console.error("Supabase connection info could not be  found for url : " + supabaseUrl);
-}
-
-function setOrderMenuOpen(shouldOpen: boolean) {
-
-}
 
 export default async function Home() {
-  const { data, error } = await supabase.from("Inventory").select("*");
 
-  if (error) {
-    console.error(error);
-    return <div>Error Loading Inventory</div>
-  }
+  // const { data, error } = dbConnection.from("Inventory").select("*");
 
-  let showOrderMenu: boolean = false;
+  // if (error) {
+  //   console.error(error);
+  //   return <div>Error Loading Inventory</div>
+  // }
+
+  const data = await inventoryManager.getAll();
 
   return (
     <>
       <h1 className="title">Shelf-Help</h1>
-      <NewOrderButton showMenu={showOrderMenu} />
-      <OrderMenu isOpen={showOrderMenu} />
+      <NewOrderWrapper />
       <div className="inventory-table">
         <div className="inventory-row table-header">
           <p className="inventory-field">Product</p>

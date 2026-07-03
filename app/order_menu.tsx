@@ -1,6 +1,6 @@
 'use client'
 
-import { ChangeEvent, ChangeEventHandler, ReactEventHandler, useEffect, useState } from 'react';
+import { ChangeEvent, ChangeEventHandler, MouseEvent, ReactEventHandler, useEffect, useState } from 'react';
 import { Tables } from '@/database.types';
 
 type Product = {
@@ -57,6 +57,13 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 		}
 	}
 
+	function removeProductFromOrder(selectedProduct: Product) {
+		const foundProduct = inventory.find(product => product.id === Number(selectedProduct.id));
+		if (foundProduct) {
+			updateProductsOrdered(prevItems => [...prevItems, foundProduct]);
+		}
+	}
+
 	return (
 		<div id='orderMenu' className='popup'>
 			<h1 className='mt-5 ml-5 text-3xl font-bold'>New Order</h1>
@@ -85,6 +92,7 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 							<p className='inventory-field'>{product.product}</p>
 							<input className='inventory-field' type='number' name='price' defaultValue={product.price!} />
 							<input className='inventory-field' type='number' name='quantity' defaultValue={product.quantity!} />
+							<button className='button' onClick={() => removeProductFromOrder(product)}>x</button>
 						</div>
 					))}
 				</div>

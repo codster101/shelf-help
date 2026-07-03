@@ -51,8 +51,10 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 		[isOpen]);
 
 	function addProductToOrder(event: ChangeEvent<HTMLSelectElement>) {
-
-
+		const selectedProduct = inventory.find(product => product.id === Number(event.target.value));
+		if (selectedProduct) {
+			updateProductsOrdered(prevItems => [...prevItems, selectedProduct]);
+		}
 	}
 
 	return (
@@ -72,12 +74,20 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 				Products:
 				<select onChange={addProductToOrder}>
 					{inventory.map((product) => (
-						<option key={product.product} value={product.product}>
+						<option key={product.id} value={product.id}>
 							{product.product}
 						</option>
-					))};
+					))}
 				</select>
-
+				<div id='ordered-products'>
+					{productsOrdered.map((product) => (
+						<div key={product.id} className='inventory-row inventory-entry'>
+							<p className='inventory-field'>{product.product}</p>
+							<input className='inventory-field' type='number' name='price' defaultValue={product.price!} />
+							<input className='inventory-field' type='number' name='quantity' defaultValue={product.quantity!} />
+						</div>
+					))}
+				</div>
 			</label>
 			<button className='absolute top-0 right-0 w-10' onClick={() => { closeMenu() }}>X</button>
 		</div>

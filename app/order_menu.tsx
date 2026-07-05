@@ -18,6 +18,11 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 	const [inventory, setInventory] = useState<Tables<'Inventory'>[]>([]);
 	const [productsOrdered, updateProductsOrdered] = useState<Product[]>([]);
 
+	const [subtotal, setSubtotal] = useState(0);
+	const [taxes, setTaxes] = useState(0);
+	const [shipping, setShipping] = useState(0);
+	const [total, setTotal] = useState(0);
+
 	useEffect(() => {
 		async function loadInventory() {
 			try {
@@ -50,18 +55,27 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 	},
 		[isOpen]);
 
+	useEffect(() => {
+		// update subtotal
+		setSubtotal(productsOrdered.reduce((sum, product) => sum + product.price!, 0));
+		// update shipping
+		// update taxes
+		// update total
+	},
+		[productsOrdered]);
+
 	function addProductToOrder(event: ChangeEvent<HTMLSelectElement>) {
 		const selectedProduct = inventory.find(product => product.id === Number(event.target.value));
 		if (selectedProduct) {
+
+			productsOrdered.map((product) => { product.id == selectedProduct.id ? product.quantity!++ : return });
 			updateProductsOrdered(prevItems => [...prevItems, selectedProduct]);
 		}
 	}
 
 	function removeProductFromOrder(selectedProduct: Product) {
-		const foundProduct = inventory.find(product => product.id === Number(selectedProduct.id));
-		if (foundProduct) {
-			updateProductsOrdered(prevItems => [...prevItems, foundProduct]);
-		}
+		const updatedProducts = productsOrdered.filter(product => product.id != selectedProduct.id);
+		updateProductsOrdered(updatedProducts);
 	}
 
 	return (
@@ -91,12 +105,23 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 						<div key={product.id} className='inventory-row inventory-entry'>
 							<p className='inventory-field'>{product.product}</p>
 							<input className='inventory-field' type='number' name='price' defaultValue={product.price!} />
-							<input className='inventory-field' type='number' name='quantity' defaultValue={product.quantity!} />
+							<input className='inventory-field' type='number' name='quantity' defaultValue={"0"} />
 							<button className='button' onClick={() => removeProductFromOrder(product)}>x</button>
 						</div>
 					))}
 				</div>
 			</label>
+			<br />
+			<h2>Price Breakdown</h2>
+			<br />
+			<p>Subtotal: {subtotal.toLocaleString()}</p>
+			<br />
+			<p>Tax: </p>
+			<br />
+			<p>Shipping: </p>
+			<br />
+			<p>Total: </p>
+			<br />
 			<button className='absolute top-0 right-0 w-10' onClick={() => { closeMenu() }}>X</button>
 		</div>
 	);

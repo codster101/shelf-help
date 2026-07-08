@@ -3,11 +3,12 @@
 import { ChangeEvent, ChangeEventHandler, MouseEvent, ReactEventHandler, useEffect, useState } from 'react';
 import { Tables } from '@/database.types';
 
-type Product = {
+type OrderItem = {
 	product: string
-	quantity: number | null
+	quantity: number
 	price: number | null
 	id: number
+	lineItem: number
 }
 
 export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, closeMenu: () => void }) {
@@ -15,8 +16,9 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 	let isHidden = true;
 
 
+	const [selectedProduct, updateSelectedProduct] = useState<Tables<'Inventory'>>({ product: "Product", quantity: 0, price: 0, id: -1 });
 	const [inventory, setInventory] = useState<Tables<'Inventory'>[]>([]);
-	const [productsOrdered, updateProductsOrdered] = useState<Product[]>([]);
+	const [itemsOrdered, updateItemsOrdered] = useState<OrderItem[]>([]);
 
 	const [subtotal, setSubtotal] = useState(0);
 	const [taxes, setTaxes] = useState(0);
@@ -57,25 +59,51 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 
 	useEffect(() => {
 		// update subtotal
-		setSubtotal(productsOrdered.reduce((sum, product) => sum + product.price!, 0));
+		setSubtotal(itemsOrdered.reduce((sum, product) => sum + product.price!, 0));
 		// update shipping
 		// update taxes
 		// update total
 	},
-		[productsOrdered]);
+		[itemsOrdered]);
 
-	function addProductToOrder(event: ChangeEvent<HTMLSelectElement>) {
+	function addItemToOrder(event: ChangeEvent<HTMLSelectElement>) {
+		// Find the selected product in the inventory
 		const selectedProduct = inventory.find(product => product.id === Number(event.target.value));
-		if (selectedProduct) {
 
-			productsOrdered.map((product) => { product.id == selectedProduct.id ? product.quantity!++ : return });
-			updateProductsOrdered(prevItems => [...prevItems, selectedProduct]);
+		// If a product was found in the inventory
+		if (selectedProduct) {
+			// Find the index of the selected product in the order
+			const productIndex = itemsOrdered.findIndex(product => product.id === selectedProduct.id);
+
+			// If not found update the state of the order adding the selected product as an OrderItem
+			if (productIndex === -1) {
+				updateItemsOrdered(prevItems => [...prevItems,
+				{ ...selectedProduct, quantity: 1, lineItem: itemsOrdered.length }]);
+			}
+			else {	// Else increase the quantity of the item at the found index by 1 
+				//and update the state of the order with the new array
+				updateItemsOrdered(prev =>
+					prev.map((product, i) =>
+						productIndex === i ? { ...product, quantity: product.quantity + 1 } : product
+					));
+			}
+
+			// // If the product is already in the order update the existing product quantity instead of adding the product
+			// if (productsOrdered.find(product => product.id === Number(event.target.value))) {
+			// 	// Loop through ordered products and if match found then increase the quantity by 1
+			// 	productsOrdered.map((product) => {
+			// 		product.id == selectedProduct.id ? { ...product, quantity: product.quantity!++ } : product
+			// 	});
+			// }
+			// else {
+			// 	updateProductsOrdered(prevItems => [...prevItems, selectedProduct]);
+			// }
 		}
 	}
 
-	function removeProductFromOrder(selectedProduct: Product) {
-		const updatedProducts = productsOrdered.filter(product => product.id != selectedProduct.id);
-		updateProductsOrdered(updatedProducts);
+	function removeItemFromOrder(selectedProduct: OrderItem) {
+		const updatedProducts = itemsOrdered.filter(product => product.id != selectedProduct.id);
+		updateItemsOrdered(updatedProducts);
 	}
 
 	return (
@@ -93,7 +121,8 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 			<br />
 			<label>
 				Products:
-				<select onChange={addProductToOrder}>
+				<select value="" onChange={addItemToOrder}>
+					<option key={-1} value="" hidden={true}>Select a Product</option>
 					{inventory.map((product) => (
 						<option key={product.id} value={product.id}>
 							{product.product}
@@ -101,12 +130,13 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 					))}
 				</select>
 				<div id='ordered-products'>
-					{productsOrdered.map((product) => (
-						<div key={product.id} className='inventory-row inventory-entry'>
-							<p className='inventory-field'>{product.product}</p>
-							<input className='inventory-field' type='number' name='price' defaultValue={product.price!} />
-							<input className='inventory-field' type='number' name='quantity' defaultValue={"0"} />
-							<button className='button' onClick={() => removeProductFromOrder(product)}>x</button>
+					{itemsOrdered.map((item) => (
+						<div key={item.lineItem} className='inventory-row inventory-entry'>
+							<p className='inventory-field'>{item.product}</p>
+							<p className='inventory-field'>{item.price!}</p>
+							<input className='inventory-field' type='number' name='quantity'
+								value={item.quantity!} onChange={() => { }} />
+							<button className='button' onClick={() => removeItemFromOrder(item)}>x</button>
 						</div>
 					))}
 				</div>

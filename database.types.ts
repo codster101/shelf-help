@@ -37,19 +37,19 @@ export type Database = {
       Inventory: {
         Row: {
           id: number
-          price: number | null
+          price: number
           product: string
           quantity: number | null
         }
         Insert: {
           id?: number
-          price?: number | null
+          price?: number
           product?: string
           quantity?: number | null
         }
         Update: {
           id?: number
-          price?: number | null
+          price?: number
           product?: string
           quantity?: number | null
         }

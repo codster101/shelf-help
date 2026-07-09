@@ -16,7 +16,6 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 	let isHidden = true;
 
 
-	const [selectedProduct, updateSelectedProduct] = useState<Tables<'Inventory'>>({ product: "Product", quantity: 0, price: 0, id: -1 });
 	const [inventory, setInventory] = useState<Tables<'Inventory'>[]>([]);
 	const [itemsOrdered, updateItemsOrdered] = useState<OrderItem[]>([]);
 
@@ -59,12 +58,28 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 
 	useEffect(() => {
 		// update subtotal
-		setSubtotal(itemsOrdered.reduce((sum, product) => sum + product.price!, 0));
-		// update shipping
-		// update taxes
-		// update total
+		setSubtotal(itemsOrdered.reduce((sum, product) => sum + (product.price! * product.quantity), 0));
 	},
 		[itemsOrdered]);
+
+	useEffect(() => {
+		// update taxes
+		setTaxes(subtotal * .06);
+		// update shipping
+		if (subtotal != 0) {
+			setShipping(5.99);
+		}
+		else {
+			setShipping(0);
+		}
+	},
+		[subtotal])
+
+	useEffect(() => {
+		// update total
+		setTotal(subtotal + taxes + shipping);
+	},
+		[taxes])
 
 	function addItemToOrder(event: ChangeEvent<HTMLSelectElement>) {
 		// Find the selected product in the inventory
@@ -78,7 +93,7 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 			// If not found update the state of the order adding the selected product as an OrderItem
 			if (productIndex === -1) {
 				updateItemsOrdered(prevItems => [...prevItems,
-				{ ...selectedProduct, quantity: 1, lineItem: itemsOrdered.length }]);
+				{ ...selectedProduct, quantity: 1, lineItem: prevItems.length }]);
 			}
 			else {	// Else increase the quantity of the item at the found index by 1 
 				//and update the state of the order with the new array
@@ -88,22 +103,19 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 					));
 			}
 
-			// // If the product is already in the order update the existing product quantity instead of adding the product
-			// if (productsOrdered.find(product => product.id === Number(event.target.value))) {
-			// 	// Loop through ordered products and if match found then increase the quantity by 1
-			// 	productsOrdered.map((product) => {
-			// 		product.id == selectedProduct.id ? { ...product, quantity: product.quantity!++ } : product
-			// 	});
-			// }
-			// else {
-			// 	updateProductsOrdered(prevItems => [...prevItems, selectedProduct]);
-			// }
 		}
 	}
 
 	function removeItemFromOrder(selectedProduct: OrderItem) {
 		const updatedProducts = itemsOrdered.filter(product => product.id != selectedProduct.id);
 		updateItemsOrdered(updatedProducts);
+	}
+
+	function updateQuantity(event: ChangeEvent<HTMLInputElement, HTMLInputElement>, id: number) {
+		const newQuantity = Number.isNaN(event.target.valueAsNumber) ? 0 : event.target.valueAsNumber;
+		updateItemsOrdered(prev =>
+			prev.map((item) =>
+				item.id === id ? { ...item, quantity: newQuantity } : item));
 	}
 
 	return (
@@ -133,9 +145,10 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 					{itemsOrdered.map((item) => (
 						<div key={item.lineItem} className='inventory-row inventory-entry'>
 							<p className='inventory-field'>{item.product}</p>
-							<p className='inventory-field'>{item.price!}</p>
+							<p className='inventory-field'>{item.price!.toLocaleString("en", { style: "currency", currency: "USD" })}</p>
 							<input className='inventory-field' type='number' name='quantity'
-								value={item.quantity!} onChange={() => { }} />
+								value={item.quantity!} onChange={(event) =>
+									updateQuantity(event, item.id)} />
 							<button className='button' onClick={() => removeItemFromOrder(item)}>x</button>
 						</div>
 					))}
@@ -144,13 +157,13 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 			<br />
 			<h2>Price Breakdown</h2>
 			<br />
-			<p>Subtotal: {subtotal.toLocaleString()}</p>
+			<p>Subtotal: {subtotal.toLocaleString("en", { style: "currency", currency: "USD" })}</p>
 			<br />
-			<p>Tax: </p>
+			<p>Tax: {taxes.toLocaleString("en", { style: "currency", currency: "USD" })} </p>
 			<br />
-			<p>Shipping: </p>
+			<p>Shipping: {shipping.toLocaleString("en", { style: "currency", currency: "USD" })}</p>
 			<br />
-			<p>Total: </p>
+			<p>Total: {total.toLocaleString("en", { style: "currency", currency: "USD" })}</p>
 			<br />
 			<button className='absolute top-0 right-0 w-10' onClick={() => { closeMenu() }}>X</button>
 		</div>

@@ -27,7 +27,7 @@ export default async function Home() {
         {data?.map((row) => (
           <div key={row.id} className="inventory-row inventory-entry">
             <p className="inventory-field">{row.product}</p>
-            <p className="inventory-field">{row.price}</p>
+            <p className="inventory-field">{row.price.toLocaleString("en", { style: "currency", currency: "USD" })}</p>
             <input className="inventory-field" type="number" defaultValue={row.quantity == null ? 0 : row.quantity} />
           </div>
         ))}

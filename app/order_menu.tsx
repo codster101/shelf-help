@@ -2,6 +2,7 @@
 
 import { ChangeEvent, ChangeEventHandler, MouseEvent, ReactEventHandler, useEffect, useState } from 'react';
 import { Tables } from '@/database.types';
+import InventorySearch from './inventory_search';
 
 type OrderItem = {
 	product: string
@@ -37,6 +38,7 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 
 			}
 			catch (error) {
+				console.log(error);
 				throw new Error('Could not load the inventory from the database');
 			}
 		}
@@ -81,9 +83,9 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 	},
 		[taxes])
 
-	function addItemToOrder(event: ChangeEvent<HTMLSelectElement>) {
+	function addItemToOrder(selectedId: number) {
 		// Find the selected product in the inventory
-		const selectedProduct = inventory.find(product => product.id === Number(event.target.value));
+		const selectedProduct = inventory.find(product => product.id === selectedId);
 
 		// If a product was found in the inventory
 		if (selectedProduct) {
@@ -132,15 +134,7 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 			</label>
 			<br />
 			<label>
-				Products:
-				<select value="" onChange={addItemToOrder}>
-					<option key={-1} value="" hidden={true}>Select a Product</option>
-					{inventory.map((product) => (
-						<option key={product.id} value={product.id}>
-							{product.product}
-						</option>
-					))}
-				</select>
+				<InventorySearch addToOrder={addItemToOrder} />
 				<div id='ordered-products'>
 					{itemsOrdered.map((item) => (
 						<div key={item.lineItem} className='inventory-row inventory-entry'>
@@ -169,3 +163,11 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 		</div>
 	);
 }
+// <select value="" onChange={addItemToOrder}>
+// 	<option key={-1} value="" hidden={true}>Select a Product</option>
+// 	{inventory.map((product) => (
+// 		<option key={product.id} value={product.id}>
+// 			{product.product}
+// 		</option>
+// 	))}
+// </select>

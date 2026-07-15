@@ -3,14 +3,11 @@ import { ConnectToDb } from './database_connection';
 export const inventoryManager = {
 	connection: ConnectToDb(),
 	async getAll() {
-
-
 		const { data, error } = await this.connection.from('Inventory').select("*");
 
 		if (error) {
 			throw new Error(error.message);
 		}
-
 
 		return data;
 	},
@@ -22,5 +19,16 @@ export const inventoryManager = {
 		}
 
 		return data;
+	},
+	async getMatchingProducts(target: string) {
+		const { data, error } =
+			await this.connection.from('Inventory').select().ilike("product", target + '%');
+
+		if (error) {
+			throw new Error(error.message);
+		}
+
+		return data;
+
 	}
 }

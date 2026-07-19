@@ -3,9 +3,9 @@
 import { Tables } from "@/database.types";
 import { ChangeEvent, useState } from "react";
 
-export default function InventorySearch({ addToOrder }: { addToOrder: (selectedId: number) => void }) {
+export default function CustomerSearch({ addToOrder }: { addToOrder: (selectedId: number) => void }) {
 	const [searchInput, updateSearchInput] = useState("default value");
-	const [searchResult, updateSearchResult] = useState<Tables<"Inventory">[]>([]);
+	const [searchResult, updateSearchResult] = useState<Tables<"Customers">[]>([]);
 	const [areResultsHidden, setResultsHidden] = useState(true);
 
 	async function handleChangeSearchInput(event: ChangeEvent<HTMLInputElement, HTMLInputElement>) {
@@ -22,16 +22,17 @@ export default function InventorySearch({ addToOrder }: { addToOrder: (selectedI
 			const params = new URLSearchParams();
 			params.append("target", target);
 
-			const response = await fetch(`api/db/inventory?${params}`);
+			const response = await fetch(`api/db/customers?${params}`);
 
 			if (!response.ok) {
 				throw new Error(`Response status: ${response.status}`);
 			}
 
 			const data = await response.json();
-			console.log(data);
+
 			updateSearchResult(data);
 			setResultsHidden(false);
+
 		}
 		catch (error) {
 			console.log(error);
@@ -40,8 +41,8 @@ export default function InventorySearch({ addToOrder }: { addToOrder: (selectedI
 	}
 
 	return (
-		<div>
-			<p className="inline">Add Item: </p>
+		<div className="my-5">
+			<p className="inline">Select Customer: </p>
 			<div className="inline relative">
 				<input className="w-50 border-2" type="search"
 					onChange={handleChangeSearchInput} onFocus={() => getProductMatches("")}
@@ -49,11 +50,11 @@ export default function InventorySearch({ addToOrder }: { addToOrder: (selectedI
 				<div className="absolute inset-x-0 top-6 w-50 border-2 rounded-sm z-5"
 					hidden={areResultsHidden} onBlur={() => { setResultsHidden(true) }}>
 					<ul className="">
-						{searchResult.map((product) => (
-							<li key={product.id}
+						{searchResult.map((customer) => (
+							<li key={customer.id}
 								className="indent-4 bg-gray-500 hover:bg-blue-500"
-								onMouseDown={() => addToOrder(product.id)}>
-								{product.product}
+								onMouseDown={() => addToOrder(customer.id)}>
+								{customer.name}
 							</li>
 						))}
 					</ul>
@@ -61,4 +62,5 @@ export default function InventorySearch({ addToOrder }: { addToOrder: (selectedI
 			</div>
 		</div>
 	);
+
 }

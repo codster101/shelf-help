@@ -3,6 +3,7 @@
 import { ChangeEvent, ChangeEventHandler, MouseEvent, ReactEventHandler, useEffect, useState } from 'react';
 import { Tables } from '@/database.types';
 import InventorySearch from './inventory_search';
+import CustomerSearch from './customer_search';
 
 type OrderItem = {
 	product: string
@@ -19,6 +20,8 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 
 	const [inventory, setInventory] = useState<Tables<'Inventory'>[]>([]);
 	const [itemsOrdered, updateItemsOrdered] = useState<OrderItem[]>([]);
+
+	const [customer, setCustomer] = useState<Tables<'Customers'>>();
 
 	const [subtotal, setSubtotal] = useState(0);
 	const [taxes, setTaxes] = useState(0);
@@ -120,6 +123,27 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 				item.id === id ? { ...item, quantity: newQuantity } : item));
 	}
 
+	async function addCustomerToOrder(selectedId: number) {
+		try {
+			const params = new URLSearchParams();
+			params.append("id", selectedId.toString());
+			const response = await fetch(`api/db/customers?${params}`)
+			if (!response.ok) {
+				throw new Error(`Response status: ${response.status}`);
+			}
+
+			const data = await response.json();
+			setCustomer(data);
+			console.log(customer);
+
+		}
+		catch (error) {
+			console.log(error);
+			throw new Error('Could not load the inventory from the database');
+		}
+
+	}
+
 	return (
 		<div id='orderMenu' className='popup'>
 			<h1 className='mt-5 ml-5 text-3xl font-bold'>New Order</h1>
@@ -128,27 +152,28 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 				<input name='date' type='date' defaultValue={(new Date).toISOString().split('T')[0]} />
 			</label>
 			<br />
-			<label>
-				Customer:
-				<input name='customer' type='text' />
-			</label>
+
+			<CustomerSearch addToOrder={addCustomerToOrder} />
+			<div id='order-customer' hidden={customer == undefined} className='border-2'>
+				<h2>{customer?.name}</h2>
+				<p>{customer?.email}</p>
+			</div>
+
+			<InventorySearch addToOrder={addItemToOrder} />
+			<div id='ordered-products'>
+				{itemsOrdered.map((item) => (
+					<div key={item.lineItem} className='inventory-row inventory-entry'>
+						<p className='inventory-field'>{item.product}</p>
+						<p className='inventory-field'>{item.price!.toLocaleString("en", { style: "currency", currency: "USD" })}</p>
+						<input className='inventory-field' type='number' name='quantity'
+							value={item.quantity!} onChange={(event) =>
+								updateQuantity(event, item.id)} />
+						<button className='button' onClick={() => removeItemFromOrder(item)}>x</button>
+					</div>
+				))}
+			</div>
 			<br />
-			<label>
-				<InventorySearch addToOrder={addItemToOrder} />
-				<div id='ordered-products'>
-					{itemsOrdered.map((item) => (
-						<div key={item.lineItem} className='inventory-row inventory-entry'>
-							<p className='inventory-field'>{item.product}</p>
-							<p className='inventory-field'>{item.price!.toLocaleString("en", { style: "currency", currency: "USD" })}</p>
-							<input className='inventory-field' type='number' name='quantity'
-								value={item.quantity!} onChange={(event) =>
-									updateQuantity(event, item.id)} />
-							<button className='button' onClick={() => removeItemFromOrder(item)}>x</button>
-						</div>
-					))}
-				</div>
-			</label>
-			<br />
+
 			<h2>Price Breakdown</h2>
 			<br />
 			<p>Subtotal: {subtotal.toLocaleString("en", { style: "currency", currency: "USD" })}</p>
@@ -163,11 +188,3 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 		</div>
 	);
 }
-// <select value="" onChange={addItemToOrder}>
-// 	<option key={-1} value="" hidden={true}>Select a Product</option>
-// 	{inventory.map((product) => (
-// 		<option key={product.id} value={product.id}>
-// 			{product.product}
-// 		</option>
-// 	))}
-// </select>

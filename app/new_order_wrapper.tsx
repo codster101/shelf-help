@@ -6,11 +6,21 @@ import OrderMenu from './order_menu';
 
 export default function NewOrderWrapper() {
 	const [isMenuOpen, setMenuOpen] = useState(false);
+	const [instanceKey, setKey] = useState(0);
 
+	function closeMenu() {
+		setMenuOpen(false);
+		setKey(prev => prev + 1);
+	}
 	return (
 		<>
 			<NewOrderButton showMenu={setMenuOpen} />
-			<OrderMenu isOpen={isMenuOpen} closeMenu={() => { console.log("close"); setMenuOpen(false) }} />
+			{isMenuOpen && (
+				<OrderMenu
+					key={instanceKey}
+					closeMenu={closeMenu}
+				/>
+			)}
 		</>
 	);
 }

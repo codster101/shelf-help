@@ -13,10 +13,11 @@ type OrderItem = {
 	lineItem: number
 }
 
-export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, closeMenu: () => void }) {
+export default function OrderMenu({ closeMenu }: { closeMenu: () => void }) {
 
 	let isHidden = true;
 
+	const [date, setDate] = useState((new Date).toISOString().split('T')[0]);
 
 	const [inventory, setInventory] = useState<Tables<'Inventory'>[]>([]);
 	const [itemsOrdered, updateItemsOrdered] = useState<OrderItem[]>([]);
@@ -49,17 +50,6 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 		loadInventory();
 	},
 		[]);
-
-	useEffect(() => {
-		isHidden = !isOpen;
-		console.log(isHidden);
-
-		const orderMenu = document.getElementById("orderMenu");
-		if (orderMenu != null) {
-			orderMenu.hidden = isHidden;
-		}
-	},
-		[isOpen]);
 
 	useEffect(() => {
 		// update subtotal
@@ -144,12 +134,33 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 
 	}
 
+	async function submitOrder() {
+		const order = {
+			customer_id: customer?.id,
+			date_ordered: date,
+			items_ordered: itemsOrdered
+		}
+
+		try {
+			await fetch('api/db/orders', {
+				method: 'POST',
+				body: JSON.stringify(order)
+			});
+		}
+		catch (error) {
+			console.log(error);
+			throw new Error('Could not load the inventory from the database');
+		}
+
+		closeMenu();
+	}
+
 	return (
 		<div id='orderMenu' className='popup'>
 			<h1 className='mt-5 ml-5 text-3xl font-bold'>New Order</h1>
 			<label>
 				Date:
-				<input name='date' type='date' defaultValue={(new Date).toISOString().split('T')[0]} />
+				<input name='date' type='date' value={date} onChange={(e) => setDate(e.currentTarget.value)} />
 			</label>
 			<br />
 
@@ -185,6 +196,7 @@ export default function OrderMenu({ isOpen, closeMenu }: { isOpen: boolean, clos
 			<p>Total: {total.toLocaleString("en", { style: "currency", currency: "USD" })}</p>
 			<br />
 			<button className='absolute top-0 right-0 w-10' onClick={() => { closeMenu() }}>X</button>
+			<button onClick={submitOrder}>Add Order</button>
 		</div>
 	);
 }

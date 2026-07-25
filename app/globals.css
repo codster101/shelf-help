@@ -74,17 +74,13 @@ button {
    display: flex;
    flex-direction: row;
 
-   margin: 5px;
-   padding: 10px 5px;
-
-
    color: var(--lavender);
 }
 
 .inventory-entry {
-   /* border-style: solid; */
-   /* border-color: var(--lavender); */
-   /* border-width: .5px; */
+   margin: 5px;
+   padding: 10px 5px;
+
    border-radius: 10px;
 
    box-shadow: -1px 1px 5px rgb(0 0 0 / 20%);

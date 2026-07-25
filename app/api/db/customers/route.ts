@@ -1,5 +1,4 @@
-import "@/app/customers_manager";
-import { customersManager } from "@/app/customers_manager";
+import { customersManager } from "@/app/db/customers_manager";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {

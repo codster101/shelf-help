@@ -1,4 +1,4 @@
-import { inventoryManager } from "@/app/inventory_manager";
+import { inventoryManager } from "@/app/db/inventory_manager";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {

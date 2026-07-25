@@ -1,10 +1,10 @@
-import { inventoryManager } from "@/app/inventory_manager";
-import { itemsOrderedManager } from "@/app/items_ordered_manager";
+import { inventoryManager } from "@/app/db/inventory_manager";
+import { itemsOrderedManager } from "@/app/db/items_ordered_manager";
 import { OrderInfo } from "@/app/order";
-import { ordersManager } from "@/app/orders_manager";
+import { ordersManager } from "@/app/db/orders_manager";
 import { NextRequest } from "next/server";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
 	const data = await ordersManager.getAll();
 	return Response.json(data);
 }

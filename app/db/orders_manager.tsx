@@ -4,7 +4,7 @@ import { ConnectToDb } from './database_connection';
 export const ordersManager = {
 	connection: ConnectToDb(),
 	async getAll() {
-		const { data, error } = await this.connection.from('Customers').select("*");
+		const { data, error } = await this.connection.from('Orders').select();
 
 		if (error) {
 			throw new Error(error.message);

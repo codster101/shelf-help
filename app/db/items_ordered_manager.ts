@@ -21,5 +21,14 @@ export const itemsOrderedManager = {
 				}
 			}));
 		return result
+	},
+	async getItemsFromOrder(order_id: number) {
+		const { data, error } = await this.connection.from('Items Ordered').select('*').eq('order_id', order_id);
+
+		if (error) {
+			throw new Error(error.message);
+		}
+
+		return data;
 	}
 }

@@ -3,7 +3,7 @@ import { ConnectToDb } from './database_connection';
 export const customersManager = {
 	connection: ConnectToDb(),
 	async getAll() {
-		const { data, error } = await this.connection.from('Customers').select("*");
+		const { data, error } = await this.connection.from('Customers').select();
 
 		if (error) {
 			throw new Error(error.message);
@@ -12,7 +12,7 @@ export const customersManager = {
 		return data;
 	},
 	async getCustomer(id: number) {
-		const { data, error } = await this.connection.from('Customers').select("*").eq('id', id);
+		const { data, error } = await this.connection.from('Customers').select().eq('id', id);
 
 		if (error) {
 			throw new Error(error.message);

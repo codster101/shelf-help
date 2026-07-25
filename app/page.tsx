@@ -5,13 +5,6 @@ import ProductSelect from './product_select';
 
 export default async function Home() {
 
-  // const { data, error } = dbConnection.from("Inventory").select("*");
-
-  // if (error) {
-  //   console.error(error);
-  //   return <div>Error Loading Inventory</div>
-  // }
-
   const data = await inventoryManager.getAll();
 
   return (

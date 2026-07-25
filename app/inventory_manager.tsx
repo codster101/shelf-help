@@ -30,5 +30,14 @@ export const inventoryManager = {
 
 		return data;
 
+	},
+	async removeProducts(products: { id: number, quantity: number }[]) {
+		const { data, error } = await this.connection.rpc('decrement_quantities', { items: products });
+
+		if (error) {
+			throw new Error(error.message);
+		}
+
+		return data;
 	}
 }

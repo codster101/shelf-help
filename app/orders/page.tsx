@@ -17,12 +17,18 @@ export default async function Page() {
 		const customerInfo = await customersManager.getCustomer(order.customer_id);
 		const items = await itemsOrderedManager.getItemsFromOrder(order.id);
 
-		orderDisplays.push({
-			id: order.id,
-			date_ordered: order.date_ordered,
-			customer: customerInfo,
-			items: items
-		});
+		if (customerInfo && typeof customerInfo == "object") {
+
+			orderDisplays.push({
+				id: order.id,
+				date_ordered: order.date_ordered,
+				customer: customerInfo,
+				items: items
+			});
+		}
+		else {
+			throw new Error("No customer in order");
+		}
 	}
 
 

@@ -36,17 +36,17 @@ export type Database = {
     Tables: {
       Customers: {
         Row: {
-          email: string | null
+          email: string
           id: number
           name: string
         }
         Insert: {
-          email?: string | null
+          email: string
           id?: number
           name: string
         }
         Update: {
-          email?: string | null
+          email?: string
           id?: number
           name?: string
         }

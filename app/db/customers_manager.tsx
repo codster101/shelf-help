@@ -12,21 +12,13 @@ export const customersManager = {
 		return data;
 	},
 	async getCustomer(id: number) {
-		const { data, error } = await this.connection.from('Customers').select().eq('id', id);
+		const { data, error } = await this.connection.from('Customers').select().eq('id', id).single();
 
 		if (error) {
 			throw new Error(error.message);
 		}
 
-		if (data.length > 1) {
-			throw new Error("Multiple customers with identical ids");
-		}
-
-		if (data.length == 0) {
-			return data;
-		}
-
-		return data[0];
+		return data;
 	},
 	async getAllNames() {
 		const { data, error } = await this.connection.from("Customers").select("name");

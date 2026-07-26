@@ -34,33 +34,121 @@ export type Database = {
   }
   public: {
     Tables: {
+      Customers: {
+        Row: {
+          email: string | null
+          id: number
+          name: string
+        }
+        Insert: {
+          email?: string | null
+          id?: number
+          name: string
+        }
+        Update: {
+          email?: string | null
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
       Inventory: {
         Row: {
           id: number
           price: number
           product: string
-          quantity: number | null
+          quantity: number
         }
         Insert: {
           id?: number
-          price?: number
+          price: number
           product?: string
-          quantity?: number | null
+          quantity: number
         }
         Update: {
           id?: number
           price?: number
           product?: string
-          quantity?: number | null
+          quantity?: number
         }
         Relationships: []
+      }
+      "Items Ordered": {
+        Row: {
+          id: number
+          order_id: number
+          price: number
+          product: string
+          product_id: number
+          quantity: number
+        }
+        Insert: {
+          id?: number
+          order_id: number
+          price: number
+          product: string
+          product_id: number
+          quantity: number
+        }
+        Update: {
+          id?: number
+          order_id?: number
+          price?: number
+          product?: string
+          product_id?: number
+          quantity?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Items Ordered_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "Orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "Items Ordered_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "Inventory"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      Orders: {
+        Row: {
+          customer_id: number
+          date_ordered: string
+          id: number
+        }
+        Insert: {
+          customer_id: number
+          date_ordered: string
+          id?: number
+        }
+        Update: {
+          customer_id?: number
+          date_ordered?: string
+          id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Orders_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "Customers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      decrement_quantities:
+        | { Args: { items: Json }; Returns: undefined }
+        | { Args: { amount: number; row_ids: number[] }; Returns: undefined }
     }
     Enums: {
       [_ in never]: never

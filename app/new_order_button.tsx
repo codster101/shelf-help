@@ -3,6 +3,6 @@
 export default function NewOrderButton({ showMenu }: { showMenu: (isOpen: boolean) => void }) {
 
 	return (
-		<button className='right' onClick={() => { showMenu(true); }}>New Order</button>
+		<button className='p-2 font-semibold hover:bg-background m-2 border-1 border-border' onClick={() => { showMenu(true);; }}>New Order</button>
 	);
 }

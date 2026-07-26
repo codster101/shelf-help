@@ -29,7 +29,7 @@ export default function InventorySearch({ addToOrder }: { addToOrder: (selectedI
 			}
 
 			const data = await response.json();
-			console.log(data);
+
 			updateSearchResult(data);
 			setResultsHidden(false);
 		}
@@ -40,18 +40,18 @@ export default function InventorySearch({ addToOrder }: { addToOrder: (selectedI
 	}
 
 	return (
-		<div>
-			<p className="inline">Add Item: </p>
+		<div className="mt-5">
+			<p className="inline text-base font-semibold">Add Item: </p>
 			<div className="inline relative">
-				<input className="w-50 border-2" type="search"
+				<input className="w-50 border-1 border-border" type="search"
 					onChange={handleChangeSearchInput} onFocus={() => getProductMatches("")}
 					onBlur={() => { setResultsHidden(true) }} />
-				<div className="absolute inset-x-0 top-6 w-50 border-2 rounded-sm z-5"
+				<div className="absolute inset-x-0 top-6 w-50 border-1 border-border z-5"
 					hidden={areResultsHidden} onBlur={() => { setResultsHidden(true) }}>
 					<ul className="">
 						{searchResult.map((product) => (
 							<li key={product.id}
-								className="indent-4 bg-gray-500 hover:bg-blue-500"
+								className="indent-4 bg-card hover:bg-background"
 								onMouseDown={() => addToOrder(product.id)}>
 								{product.product}
 							</li>

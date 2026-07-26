@@ -9,22 +9,29 @@ export default async function Home() {
 
   return (
     <>
-      <div className='flex h-screen bg-brown-500'>
-        <div className='w-1/8'>
-        </div>
-        <div className='w-7/8'>
-          <h1 className="title">Shelf-Help</h1>
-          <Link href="/orders/">Customers</Link>
+      <div className='flex h-screen bg-card'>
+        <div className='w-1/8 flex flex-col bg-card border-r-border border-r-1'>
+          <h1 className="font-serif text-xl/[1.2] font-semibold text-foreground p-4 border-b-border border-b-1">Shelf-Help</h1>
+          <div className=' flex flex-col border-b-border border-b-1'>
+            <Link href="./" className='w-full p-2 bg-background font-semibold'>Inventory</Link>
+            <Link href="/orders/" className='w-full p-2 font-semibold'>Orders</Link>
+            <Link href="/orders/" className='w-full p-2 font-semibold'>Customers</Link>
+          </div>
           <NewOrderWrapper />
-          <div className="mx-auto w-3/4">
-            <div className="flex ">
+        </div>
+        <div className='w-7/8 bg-card'>
+          <div className='h-30 p-5'>
+            <h1 className="font-serif text-2xl/[1.2] font-semibold text-foreground">Inventory</h1>
+          </div>
+          <div className="px-5 w-full bg-background border-t-border border-t-1 h-full">
+            <div className="flex border-b-border border-b-1 text-xs font-semibold text-primary-foreground uppercase tracking-[.025em] p-2">
               <p className="w-1/3">Product</p>
               <p className="w-1/3">Price</p>
               <p className="w-1/3">Quantity</p>
             </div>
             {data?.map((row) => (
-              <div key={row.id} className="flex">
-                <p className="w-1/3">
+              <div key={row.id} className="flex border-b-secondary border-b-1 p-2">
+                <p className="w-1/3 font-medium text-[14px]">
                   {row.product}
                 </p>
                 <p className="w-1/3">

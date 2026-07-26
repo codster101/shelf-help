@@ -1,0 +1,1 @@
+select decrement_quantities('[{"id": 2, "quantity":2}]'::jsonb)

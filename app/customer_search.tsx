@@ -11,13 +11,13 @@ export default function CustomerSearch({ addToOrder }: { addToOrder: (selectedId
 	async function handleChangeSearchInput(event: ChangeEvent<HTMLInputElement, HTMLInputElement>) {
 		updateSearchInput(event.target.value);
 		// Query the database for any products starting with input
-		getProductMatches(event.target.value);
+		getCustomerMatches(event.target.value);
 
 		// when fetch returns ensure the current input = the input from the fetch
 		// Then return the results
 	}
 
-	async function getProductMatches(target: string) {
+	async function getCustomerMatches(target: string) {
 		try {
 			const params = new URLSearchParams();
 			params.append("target", target);
@@ -41,18 +41,18 @@ export default function CustomerSearch({ addToOrder }: { addToOrder: (selectedId
 	}
 
 	return (
-		<div className="my-5">
-			<p className="inline">Select Customer: </p>
+		<div className="mt-5">
+			<p className="inline text-base font-semibold">Select Customer: </p>
 			<div className="inline relative">
-				<input className="w-50 border-2" type="search"
-					onChange={handleChangeSearchInput} onFocus={() => getProductMatches("")}
+				<input className="w-50 border-1 border-border" type="search"
+					onChange={handleChangeSearchInput} onFocus={() => getCustomerMatches("")}
 					onBlur={() => { setResultsHidden(true) }} />
-				<div className="absolute inset-x-0 top-6 w-50 border-2 rounded-sm z-5"
+				<div className="absolute inset-x-0 top-6 w-50 border-1 border-border z-5"
 					hidden={areResultsHidden} onBlur={() => { setResultsHidden(true) }}>
 					<ul className="">
 						{searchResult.map((customer) => (
 							<li key={customer.id}
-								className="indent-4 bg-gray-500 hover:bg-blue-500"
+								className="indent-4 bg-card hover:bg-background"
 								onMouseDown={() => addToOrder(customer.id)}>
 								{customer.name}
 							</li>

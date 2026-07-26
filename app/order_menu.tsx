@@ -105,48 +105,64 @@ export default function OrderMenu({ closeMenu }: { closeMenu: () => void }) {
 		closeMenu();
 	}
 
+	/*    position: fixed; */
+	/*    height: 80vh; */
+	/*    width: 80vw; */
+	/*    background-color: white; */
+	/*    align-self: center; */
+	/*    margin: 10vh 10vw; */
+	/*    border-radius: 10px; */
+	/*    padding: 10px; */
 	return (
-		<div id='orderMenu' className='popup'>
-			<h1 className='mt-5 ml-5 text-3xl font-bold'>New Order</h1>
-			<label>
+		<div className='absolute h-4/5 w-4/5 top-1/10 left-1/10 bg-card border-border border-1 border-radius-2 px-5'>
+			<h1 className='my-5 text-3xl font-bold serif'>New Order</h1>
+			<label className='text-sm font-semibold'>
 				Date:
 				<input name='date' type='date' value={date} onChange={(e) => setDate(e.currentTarget.value)} />
 			</label>
 			<br />
 
 			<CustomerSearch addToOrder={addCustomerToOrder} />
-			<div id='order-customer' hidden={order.customer == undefined} className='border-2'>
-				<h2>{order.customer?.name}</h2>
-				<p>{order.customer?.email}</p>
+			<div hidden={order.customer == undefined} className='border-1 border-border p-2 m-2 w-1/4'>
+				<h2 className='text-base font-semibold text-primary-foreground mono underline'>{order.customer?.name}</h2>
+				<p className='text-sm font-semibold text-primary-foreground'>Email: {order.customer?.email}</p>
 			</div>
 
 			<InventorySearch addToOrder={addItemToOrder} />
-			<div id='ordered-products'>
+			{order.items.length != 0 && <div className="mt-5 px-5 w-full bg-background border-t-border border-t-1">
 				{order.items.map((item) => (
-					<div key={item.id} className='inventory-row inventory-entry'>
-						<p className='inventory-field'>{item.product}</p>
-						<p className='inventory-field'>{item.price!.toLocaleString("en", { style: "currency", currency: "USD" })}</p>
-						<input className='inventory-field' type='number' name='quantity'
+					<div key={item.id} className='flex border-b-secondary border-b-1 p-2'>
+						<p className='w-1/3 font-medium text-[14px]'>{item.product}</p>
+						<p className='w-1/3 mono text-[12px]'>{item.price!.toLocaleString("en", { style: "currency", currency: "USD" })}</p>
+						<input className='font-medium text-[14px]' type='number' name='quantity'
 							value={item.quantity!} onChange={(event) =>
 								updateQuantity(event, item.id)} />
-						<button className='button' onClick={() => removeItemFromOrder(item)}>x</button>
+						<button className='ml-auto px-2 border-1 border-border bg-card hover:bg-background'
+							onClick={() => removeItemFromOrder(item)}>x</button>
 					</div>
 				))}
-			</div>
+			</div>}
 			<br />
 
-			<h2>Price Breakdown</h2>
-			<br />
-			<p>Subtotal: {GetPriceSummary(order).subtotal.toLocaleString("en", { style: "currency", currency: "USD" })}</p>
-			<br />
-			<p>Tax: {GetPriceSummary(order).taxes.toLocaleString("en", { style: "currency", currency: "USD" })} </p>
-			<br />
-			<p>Shipping: {GetPriceSummary(order).shipping.toLocaleString("en", { style: "currency", currency: "USD" })}</p>
-			<br />
-			<p>Total: {GetPriceSummary(order).total.toLocaleString("en", { style: "currency", currency: "USD" })}</p>
-			<br />
-			<button className='absolute top-0 right-0 w-10' onClick={() => { closeMenu() }}>X</button>
-			<button onClick={submitOrder}>Add Order</button>
+			<div className='w-50 pl-2 border-1 border-border'>
+				<h2 className='text-xl serif underline'>Price Breakdown</h2>
+				<br />
+				<p className='text-sm/1 font-semibold'>Subtotal: {GetPriceSummary(order).subtotal.toLocaleString("en", { style: "currency", currency: "USD" })}</p>
+				<br />
+				<p className='text-sm/1 font-semibold'>+ Tax: {GetPriceSummary(order).taxes.toLocaleString("en", { style: "currency", currency: "USD" })} </p>
+				<br />
+				<p className='text-sm/1 font-semibold underline'>+ Shipping: {GetPriceSummary(order).shipping.toLocaleString("en", { style: "currency", currency: "USD" })}</p>
+				<br />
+				<p className='text-sm/1 font-semibold'>Total: {GetPriceSummary(order).total.toLocaleString("en", { style: "currency", currency: "USD" })}</p>
+				<br />
+			</div>
+			<button className='absolute top-3 right-3 w-10 border-1 border-border hover:bg-background' onClick={() => { closeMenu() }}>X</button>
+			<button
+				className='my-2 p-2 border-1 border-border hover:bg-background'
+				onClick={submitOrder}
+			>
+				Add Order
+			</button>
 		</div>
 	);
 }

@@ -18,10 +18,10 @@ export async function POST(req: NextRequest) {
 
 	// Use new order id to enter the items ordered into the Items Ordered table
 	console.log("REQUEST: " + request);
-	itemsOrderedManager.addItems(request.items_ordered, addOrderResponse.id);
+	await itemsOrderedManager.addItems(request.items_ordered, addOrderResponse.id);
 
 	// Update the inventory by removing the items that were ordered
-	const updateInventoryResponse = inventoryManager.removeProducts(request.items_ordered);
+	const updateInventoryResponse = await inventoryManager.removeProducts(request.items_ordered);
 
 	return Response.json(updateInventoryResponse);
 

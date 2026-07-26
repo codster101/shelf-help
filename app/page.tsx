@@ -2,6 +2,7 @@ import NewOrderWrapper from './new_order_wrapper';
 import { inventoryManager } from './db/inventory_manager';
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
 
 export default async function Home() {
 

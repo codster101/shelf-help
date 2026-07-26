@@ -7,6 +7,7 @@ import { customersManager } from '../db/customers_manager';
 import { itemsOrderedManager } from '../db/items_ordered_manager';
 import { OrderTable } from './order_table';
 
+export const dynamic = 'force-dynamic';
 
 export default async function Page() {
 

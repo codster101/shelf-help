@@ -1,6 +1,8 @@
 import { customersManager } from "@/app/db/customers_manager";
 import { NextRequest } from "next/server";
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: NextRequest) {
 	console.log(req.nextUrl.searchParams.has("target"));
 

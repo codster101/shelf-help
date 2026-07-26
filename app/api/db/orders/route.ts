@@ -4,6 +4,8 @@ import { OrderInfo } from "@/app/order";
 import { ordersManager } from "@/app/db/orders_manager";
 import { NextRequest } from "next/server";
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
 	const data = await ordersManager.getAll();
 	return Response.json(data);

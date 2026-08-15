@@ -39,5 +39,13 @@ export const inventoryManager = {
 		}
 
 		return data;
+	},
+	async updateInventory(products: { sku: number, product: string, price: number }[]) {
+		const { error } = await this.connection.from("Inventory").insert(products);
+
+		if (error) {
+			throw new Error(error.message);
+		}
+
 	}
 }

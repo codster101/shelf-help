@@ -58,18 +58,21 @@ export type Database = {
           price: number
           product: string
           quantity: number
+          sku: number
         }
         Insert: {
           id?: number
           price: number
           product?: string
-          quantity: number
+          quantity?: number
+          sku: number
         }
         Update: {
           id?: number
           price?: number
           product?: string
           quantity?: number
+          sku?: number
         }
         Relationships: []
       }

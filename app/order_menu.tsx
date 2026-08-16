@@ -105,14 +105,6 @@ export default function OrderMenu({ closeMenu }: { closeMenu: () => void }) {
 		closeMenu();
 	}
 
-	/*    position: fixed; */
-	/*    height: 80vh; */
-	/*    width: 80vw; */
-	/*    background-color: white; */
-	/*    align-self: center; */
-	/*    margin: 10vh 10vw; */
-	/*    border-radius: 10px; */
-	/*    padding: 10px; */
 	return (
 		<div className='absolute h-4/5 w-4/5 top-1/10 left-1/10 bg-card border-border border-1 border-radius-2 px-5'>
 			<h1 className='my-5 text-3xl font-bold serif'>New Order</h1>

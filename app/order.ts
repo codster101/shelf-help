@@ -11,6 +11,7 @@ export type Order = {
 		price: number
 		quantity: number
 		id: number
+		sku: number
 	}[]
 }
 
@@ -22,6 +23,7 @@ export type OrderInfo = {
 		price: number
 		quantity: number
 		id: number
+		sku: number
 	}[]
 }
 

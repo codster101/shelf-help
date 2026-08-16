@@ -24,7 +24,13 @@ export default async function Page() {
 				id: order.id,
 				date_ordered: order.date_ordered,
 				customer: customerInfo,
-				items: items
+				items: items.map(item => ({
+					id: item.product_id,
+					product: item.product,
+					price: item.price,
+					quantity: item.quantity,
+					sku: item.product_sku
+				}))
 			});
 		}
 		else {

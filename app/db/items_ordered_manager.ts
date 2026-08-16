@@ -5,6 +5,7 @@ type item = {
 	price: number
 	quantity: number
 	id: number
+	sku: number
 }
 
 export const itemsOrderedManager = {
@@ -17,7 +18,8 @@ export const itemsOrderedManager = {
 					price: item.price,
 					quantity: item.quantity,
 					product_id: item.id,
-					order_id: order_id
+					order_id: order_id,
+					product_sku: item.sku
 				}
 			}));
 		return result

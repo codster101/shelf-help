@@ -1,14 +1,31 @@
 import * as cheerio from 'cheerio';
 import { inventoryManager } from './db/inventory_manager';
 
+async function fetchWithRetry(retries = 3) {
+	for (let i = 0; i < retries; i++) {
+		try {
+			return await fetch("https://www.marykay.com/en/updategrid?cgid=root&srule=product-name-ascending&start=0&sz=10000", {
+				headers: {
+					"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+					"Accept": "text/html,application/xhtml+xml",
+				}
+			});
+		} catch (e) {
+			if (i === retries - 1) throw e;
+			await new Promise(r => setTimeout(r, 500 * 2 ** i));
+		}
+	}
+	throw new Error("unreachable");
+}
 
 export default async function Sync() {
-	const response = await fetch("https://www.marykay.com/en/updategrid?cgid=root&srule=product-name-ascending&start=0&sz=10000", {
-		headers: {
-			"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
-			"Accept": "text/html,application/xhtml+xml",
-		}
-	});
+	const response = await fetchWithRetry()
+	// const response = await fetch("https://www.marykay.com/en/updategrid?cgid=root&srule=product-name-ascending&start=0&sz=10000", {
+	// 	headers: {
+	// 		"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+	// 		"Accept": "text/html,application/xhtml+xml",
+	// 	}
+	// });
 
 
 	if (!response.ok) {

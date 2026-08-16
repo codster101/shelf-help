@@ -3,5 +3,5 @@ export const dynamic = 'force-dynamic';
 
 export function GET() {
 	Sync();
-	return new Response();
+	return new Response("Sync");
 }

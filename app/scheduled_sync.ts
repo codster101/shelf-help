@@ -14,7 +14,7 @@ async function startSync() {
 		}
 
 		const result = await response.text();
-		await fetch("http://localhost:3000/api/sync", {
+		await fetch("http://shelf-help-sable.vercel.app/api/sync", {
 			method: "POST",
 			body: result
 		});

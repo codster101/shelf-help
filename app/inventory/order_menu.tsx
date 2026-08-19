@@ -4,7 +4,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { Tables } from '@/database.types';
 import InventorySearch from './inventory_search';
 import CustomerSearch from './customer_search';
-import { GetPriceSummary, NewOrder, Order, SubmitOrder } from './order';
+import { GetPriceSummary, NewOrder, Order, SubmitOrder } from '@/app/types/order';
 
 export default function OrderMenu({ closeMenu }: { closeMenu: () => void }) {
 

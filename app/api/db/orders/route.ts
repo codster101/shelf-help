@@ -1,6 +1,6 @@
 import { inventoryManager } from "@/app/db/inventory_manager";
 import { itemsOrderedManager } from "@/app/db/items_ordered_manager";
-import { OrderInfo } from "@/app/order";
+import { OrderInfo } from "@/app/types/order";
 import { ordersManager } from "@/app/db/orders_manager";
 import { NextRequest } from "next/server";
 

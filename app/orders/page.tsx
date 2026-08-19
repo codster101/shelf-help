@@ -1,8 +1,8 @@
-import NewOrderWrapper from '../new_order_wrapper';
+import NewOrderWrapper from '@/app/inventory/new_order_wrapper';
 import Link from 'next/link';
 import { ordersManager } from '../db/orders_manager';
 import { Tables } from '@/database.types';
-import { GetPriceSummary, Order } from '../order';
+import { Order } from '@/app/types/order';
 import { customersManager } from '../db/customers_manager';
 import { itemsOrderedManager } from '../db/items_ordered_manager';
 import { OrderTable } from './order_table';

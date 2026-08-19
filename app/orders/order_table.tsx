@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from "react";
-import { GetPriceSummary, Order } from "../order";
+import { GetPriceSummary, Order } from "@/app/types/order";
 
 export function OrderTable({ orders }: { orders: Order[] }) {
 	const [expandedId, setExpandedId] = useState<number | null>(null);

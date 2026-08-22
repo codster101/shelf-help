@@ -1,5 +1,6 @@
 import * as cheerio from 'cheerio';
 import { inventoryManager } from './db/inventory_manager';
+import { createClient } from '@supabase/supabase-js/dist/index.cjs';
 
 export default async function Sync(data: string) {
 	const $ = cheerio.load(data);
@@ -41,5 +42,28 @@ export default async function Sync(data: string) {
 	console.log(products.length);
 	console.log(products);
 
-	inventoryManager.updateInventory(products);
+	const supabase = createClient(process.env.SUPABASE_URL!,
+		process.env.SUPABASE_SERVICE_ROLE_KEY!,
+		{
+			auth: {
+				autoRefreshToken: false,
+				persistSession: false,
+			},
+		}
+	)
+
+	const uniqueProducts = Array.from(
+		new Map(products.map(p => [p.sku, p])).values()
+	);
+
+	// const { error } = await supabase.from("Inventory").insert(products);
+	const { error } = await supabase.from("Inventory").upsert(uniqueProducts, {
+		onConflict: 'sku',
+		defaultToNull: true
+	});
+
+	if (error) {
+		throw new Error(error.message);
+	}
+
 }

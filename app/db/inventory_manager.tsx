@@ -1,7 +1,8 @@
-import { supabase } from './database_connection';
+import { createClient } from "@/lib/supabase/server";
 
 export const inventoryManager = {
 	async getAll() {
+		const supabase = await createClient()
 		const { data, error } = await supabase.from('Inventory').select("*");
 
 		if (error) {
@@ -11,6 +12,7 @@ export const inventoryManager = {
 		return data;
 	},
 	async getAllNames() {
+		const supabase = await createClient()
 		const { data, error } = await supabase.from("Inventory").select("Product");
 
 		if (error) {
@@ -20,6 +22,7 @@ export const inventoryManager = {
 		return data;
 	},
 	async getMatchingProducts(target: string) {
+		const supabase = await createClient()
 		const { data, error } =
 			await supabase.from('Inventory').select().ilike("product", target + '%');
 
@@ -31,6 +34,7 @@ export const inventoryManager = {
 
 	},
 	async removeProducts(products: { id: number, quantity: number }[]) {
+		const supabase = await createClient()
 		const { data, error } = await supabase.rpc('decrement_quantities', { items: products });
 
 		if (error) {
@@ -40,6 +44,8 @@ export const inventoryManager = {
 		return data;
 	},
 	async updateInventory(products: { sku: number, product: string, price: number }[]) {
+		const supabase = await createClient()
+
 		const uniqueProducts = Array.from(
 			new Map(products.map(p => [p.sku, p])).values()
 		);

@@ -1,8 +1,8 @@
-import { Tables } from '@/database.types';
-import { supabase } from './database_connection';
+import { createClient } from '@/lib/supabase/server';
 
 export const ordersManager = {
 	async getAll() {
+		const supabase = await createClient();
 		const { data, error } = await supabase.from('Orders').select();
 
 		if (error) {
@@ -12,6 +12,8 @@ export const ordersManager = {
 		return data;
 	},
 	async addOrder(order: { customer_id: number, date_ordered: string }) {
+		const supabase = await createClient();
+
 		const orderInfo = {
 			customer_id: order.customer_id,
 			date_ordered: order.date_ordered

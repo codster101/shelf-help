@@ -1,7 +1,6 @@
 'use client'
 
-import { link } from "fs/promises";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { SubmitEvent, useState } from "react";
 
 export default function LoginPage() {
@@ -9,15 +8,12 @@ export default function LoginPage() {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 
+	const router = useRouter();
+
 	async function processLoginAttempt(event: SubmitEvent<HTMLFormElement>) {
 		event.preventDefault();
 
 		try {
-			console.log("send input");
-			// const params = new URLSearchParams();
-			// params.append("username", username);
-			// params.append("password", password);
-			// const response = await fetch(`api/auth?${params}`)
 			const response = await fetch('/api/auth', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
@@ -25,6 +21,8 @@ export default function LoginPage() {
 			}); if (!response.ok) {
 				throw new Error(`Response status: ${response.status}`);
 			}
+
+			router.push('/inventory');
 		}
 		catch (e) {
 			console.log("error in authenticaiton api");
@@ -32,7 +30,6 @@ export default function LoginPage() {
 			alert("Incorrect username or password");
 		}
 
-		redirect('inventory');
 	}
 
 	return (

@@ -13,13 +13,13 @@ export const inventoryManager = {
 	},
 	async getAllNames() {
 		const supabase = await createClient()
-		const { data, error } = await supabase.from("Inventory").select("Product");
+		const { data, error } = await supabase.from("Inventory").select("product");
 
 		if (error) {
 			throw new Error(error.message);
 		}
 
-		return data;
+		return data.map(row => row.product);
 	},
 	async getMatchingProducts(target: string) {
 		const supabase = await createClient()

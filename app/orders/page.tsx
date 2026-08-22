@@ -39,15 +39,15 @@ export default async function Page() {
 	}
 
 
+	// <Link href="/orders/" className='w-full p-2 font-semibold hover:bg-background'>Customers</Link>
 	return (
 		<>
 			<div className='flex h-screen bg-card'>
 				<div className='w-1/8 flex flex-col bg-card border-r-border border-r-1'>
 					<h1 className="font-serif text-xl/[1.2] font-semibold text-foreground p-4 border-b-border border-b-1">Shelf-Help</h1>
 					<div className=' flex flex-col border-b-border border-b-1'>
-						<Link href="./" className='w-full p-2 font-semibold hover:bg-background'>Inventory</Link>
+						<Link href="/inventory" className='w-full p-2 font-semibold hover:bg-background'>Inventory</Link>
 						<Link href="/orders/" className='w-full p-2 bg-background font-semibold'>Orders</Link>
-						<Link href="/orders/" className='w-full p-2 font-semibold hover:bg-background'>Customers</Link>
 					</div>
 					<NewOrderWrapper />
 				</div>

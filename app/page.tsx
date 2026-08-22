@@ -1,5 +1,7 @@
 'use client'
 
+import { link } from "fs/promises";
+import { redirect } from "next/navigation";
 import { SubmitEvent, useState } from "react";
 
 export default function LoginPage() {
@@ -27,7 +29,10 @@ export default function LoginPage() {
 		catch (e) {
 			console.log("error in authenticaiton api");
 			console.error(e);
+			alert("Incorrect username or password");
 		}
+
+		redirect('inventory');
 	}
 
 	return (

@@ -1,4 +1,4 @@
-import { ConnectToDb } from "@/app/db/database_connection";
+import { supabase } from "@/app/db/database_connection";
 import { NextRequest } from "next/server";
 
 export const dynamic = 'force-dynamic';
@@ -9,7 +9,6 @@ export async function POST(req: NextRequest) {
 		let username = loginInfo.username;
 		let password = loginInfo.password;
 		if (username && password) {
-			const supabase = ConnectToDb();
 			const { data, error } = await supabase.auth.signInWithPassword({
 				email: username,
 				password: password

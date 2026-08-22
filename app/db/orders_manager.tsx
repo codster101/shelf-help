@@ -1,10 +1,9 @@
 import { Tables } from '@/database.types';
-import { ConnectToDb } from './database_connection';
+import { supabase } from './database_connection';
 
 export const ordersManager = {
-	connection: ConnectToDb(),
 	async getAll() {
-		const { data, error } = await this.connection.from('Orders').select();
+		const { data, error } = await supabase.from('Orders').select();
 
 		if (error) {
 			throw new Error(error.message);
@@ -17,7 +16,7 @@ export const ordersManager = {
 			customer_id: order.customer_id,
 			date_ordered: order.date_ordered
 		}
-		const { data, error } = await this.connection.from('Orders').insert(orderInfo).select('id').single();
+		const { data, error } = await supabase.from('Orders').insert(orderInfo).select('id').single();
 
 		if (error) {
 			throw new Error(error.message);

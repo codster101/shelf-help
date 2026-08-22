@@ -2,6 +2,7 @@ import NewOrderWrapper from './new_order_wrapper';
 import { inventoryManager } from '@/app/db/inventory_manager';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import NewProductWrapper from './new_product_wrapper';
 
 export const dynamic = 'force-dynamic';
 
@@ -9,15 +10,15 @@ export default async function Home() {
 
   const data = await inventoryManager.getAll();
 
+  // <Link href="/orders/" className='w-full p-2 font-semibold'>Customers</Link>
   return (
     <>
       <div className='flex bg-card'>
         <div className='w-1/8 flex flex-col bg-card border-r-border border-r-1'>
           <h1 className="font-serif text-xl/[1.2] font-semibold text-foreground p-4 border-b-border border-b-1">Shelf-Help</h1>
           <div className=' flex flex-col border-b-border border-b-1'>
-            <Link href="./" className='w-full p-2 bg-background font-semibold'>Inventory</Link>
+            <Link href="/inventory/" className='w-full p-2 bg-background font-semibold'>Inventory</Link>
             <Link href="/orders/" className='w-full p-2 font-semibold'>Orders</Link>
-            <Link href="/orders/" className='w-full p-2 font-semibold'>Customers</Link>
           </div>
           <NewOrderWrapper />
         </div>
@@ -25,6 +26,7 @@ export default async function Home() {
           <div className='h-30 p-5'>
             <h1 className="font-serif text-2xl/[1.2] font-semibold text-foreground">Inventory</h1>
           </div>
+          <NewProductWrapper />
           <div className="px-5 w-full bg-background border-t-border border-t-1 h-full">
             <div className="flex border-b-border border-b-1 text-xs font-semibold text-primary-foreground uppercase tracking-[.025em] p-2">
               <p className="w-1/3">Product</p>

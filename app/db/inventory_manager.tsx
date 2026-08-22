@@ -1,9 +1,8 @@
-import { ConnectToDb } from './database_connection';
+import { supabase } from './database_connection';
 
 export const inventoryManager = {
-	connection: ConnectToDb(),
 	async getAll() {
-		const { data, error } = await this.connection.from('Inventory').select("*");
+		const { data, error } = await supabase.from('Inventory').select("*");
 
 		if (error) {
 			throw new Error(error.message);
@@ -12,7 +11,7 @@ export const inventoryManager = {
 		return data;
 	},
 	async getAllNames() {
-		const { data, error } = await this.connection.from("Inventory").select("Product");
+		const { data, error } = await supabase.from("Inventory").select("Product");
 
 		if (error) {
 			throw new Error(error.message);
@@ -22,7 +21,7 @@ export const inventoryManager = {
 	},
 	async getMatchingProducts(target: string) {
 		const { data, error } =
-			await this.connection.from('Inventory').select().ilike("product", target + '%');
+			await supabase.from('Inventory').select().ilike("product", target + '%');
 
 		if (error) {
 			throw new Error(error.message);
@@ -32,7 +31,7 @@ export const inventoryManager = {
 
 	},
 	async removeProducts(products: { id: number, quantity: number }[]) {
-		const { data, error } = await this.connection.rpc('decrement_quantities', { items: products });
+		const { data, error } = await supabase.rpc('decrement_quantities', { items: products });
 
 		if (error) {
 			throw new Error(error.message);
@@ -41,7 +40,15 @@ export const inventoryManager = {
 		return data;
 	},
 	async updateInventory(products: { sku: number, product: string, price: number }[]) {
-		const { error } = await this.connection.from("Inventory").insert(products);
+		const uniqueProducts = Array.from(
+			new Map(products.map(p => [p.sku, p])).values()
+		);
+
+		// const { error } = await supabase.from("Inventory").insert(products);
+		const { error } = await supabase.from("Inventory").upsert(uniqueProducts, {
+			onConflict: 'sku',
+			defaultToNull: true
+		});
 
 		if (error) {
 			throw new Error(error.message);

@@ -1,4 +1,4 @@
-import { inventoryManager } from './db/inventory_manager'
+import { inventoryManager } from '@/app/db/inventory_manager'
 
 export default async function ProductSelect() {
 	return (

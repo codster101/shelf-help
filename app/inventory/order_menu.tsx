@@ -5,6 +5,7 @@ import { Tables } from '@/database.types';
 import InventorySearch from './inventory_search';
 import CustomerSearch from './customer_search';
 import { GetPriceSummary, NewOrder, Order, SubmitOrder } from '@/app/types/order';
+import { customerAddressLine, customerCityState, customerName, customerZipCountry } from '../customers/customer_functions';
 
 export default function OrderMenu({ closeMenu }: { closeMenu: () => void }) {
 
@@ -119,9 +120,19 @@ export default function OrderMenu({ closeMenu }: { closeMenu: () => void }) {
 					</div>
 
 					<CustomerSearch addToOrder={addCustomerToOrder} />
-					<div hidden={order.customer == undefined} className='border-1 border-border p-2 mt-2'>
-						<h2 className='text-base font-semibold text-primary-foreground mono underline'>{order.customer?.name}</h2>
-						<p className='text-sm font-semibold text-primary-foreground'>{order.customer?.email}</p>
+					<div hidden={order.customer == undefined} className='grid grid-cols-[.6fr_.4fr] border-1 border-border p-2 mt-2'>
+						<div>
+							<h2 className='text-base text-lg font-bold text-primary-foreground mono'>{customerName(order.customer!)}</h2>
+							<p className='text-sm text-primary-foreground'>{order.customer?.email}</p>
+						</div>
+						<div>
+							<p className='pr-10 text-sm font-semibold text-primary-foreground '>Shipping Address</p>
+							<p className="pr-5 text-sm text-primary-foreground">
+								{customerAddressLine(order.customer!)}<br />
+								{customerCityState(order.customer!)}<br />
+								{customerZipCountry(order.customer!)}<br />
+							</p>
+						</div>
 					</div>
 
 					<InventorySearch addToOrder={addItemToOrder} />

@@ -2,6 +2,7 @@
 
 import { Tables } from "@/database.types";
 import { ChangeEvent, useState } from "react";
+import { customerName } from "../customers/customer_functions";
 
 export default function CustomerSearch({ addToOrder }: { addToOrder: (selectedId: number) => void }) {
 	const [searchInput, updateSearchInput] = useState("default value");
@@ -30,7 +31,7 @@ export default function CustomerSearch({ addToOrder }: { addToOrder: (selectedId
 
 			const data = await response.json();
 
-			updateSearchResult(data);
+			updateSearchResult(data.slice(0, 10));
 			setResultsHidden(false);
 
 		}
@@ -54,7 +55,7 @@ export default function CustomerSearch({ addToOrder }: { addToOrder: (selectedId
 							<li key={customer.id}
 								className="indent-4 bg-card hover:bg-background"
 								onMouseDown={() => addToOrder(customer.id)}>
-								{customer.name}
+								{customerName(customer)}
 							</li>
 						))}
 					</ul>

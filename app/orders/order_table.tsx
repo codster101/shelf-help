@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { GetPriceSummary, Order } from "@/app/types/order";
+import { customerName } from "../customers/customer_functions";
 
 export function OrderTable({ orders }: { orders: Order[] }) {
 	const [expandedId, setExpandedId] = useState<number | null>(null);
@@ -17,7 +18,7 @@ export function OrderTable({ orders }: { orders: Order[] }) {
 								<span className=""> ▶</span>
 							</button>
 							<p className="w-1/3 font-medium text-[14px]">
-								{order.customer?.name}
+								{customerName(order.customer!)}
 							</p>
 							<p className="w-1/3">
 								{order.date_ordered}

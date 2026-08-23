@@ -10,7 +10,6 @@ export default async function Home() {
 
   const data = await inventoryManager.getAll();
 
-  // <Link href="/orders/" className='w-full p-2 font-semibold'>Customers</Link>
   return (
     <>
       <div className='flex bg-card'>
@@ -19,6 +18,7 @@ export default async function Home() {
           <div className=' flex flex-col border-b-border border-b-1'>
             <Link href="/inventory/" className='w-full p-2 bg-background font-semibold'>Inventory</Link>
             <Link href="/orders/" className='w-full p-2 font-semibold'>Orders</Link>
+            <Link href="/customers/" className='w-full p-2 font-semibold'>Customers</Link>
           </div>
           <NewOrderWrapper />
         </div>

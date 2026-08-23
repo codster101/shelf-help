@@ -1,11 +1,9 @@
+import { Tables } from "@/database.types"
+
 export type Order = {
 	id?: number
 	date_ordered: string
-	customer: {
-		id: number
-		name: string
-		email: string
-	} | null
+	customer: Tables<'Customers'> | null
 	items: {
 		product: string
 		price: number
@@ -44,7 +42,7 @@ export function GetPriceSummary(order: Order) {
 		subtotal: subtotal,
 		taxes: subtotal * 0.06,
 		shipping: 0.00,
-		total: (subtotal * 1.06) + 5.99
+		total: (subtotal * 1.06)
 	}
 }
 

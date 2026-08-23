@@ -36,19 +36,46 @@ export type Database = {
     Tables: {
       Customers: {
         Row: {
+          address_line_1: string | null
+          address_line_2: string | null
+          birthday: string | null
+          city: string | null
+          country: string | null
           email: string
+          first_name: string
           id: number
-          name: string
+          last_name: string | null
+          phone_number: string | null
+          state: string | null
+          zip_code: string | null
         }
         Insert: {
+          address_line_1?: string | null
+          address_line_2?: string | null
+          birthday?: string | null
+          city?: string | null
+          country?: string | null
           email: string
+          first_name: string
           id?: number
-          name: string
+          last_name?: string | null
+          phone_number?: string | null
+          state?: string | null
+          zip_code?: string | null
         }
         Update: {
+          address_line_1?: string | null
+          address_line_2?: string | null
+          birthday?: string | null
+          city?: string | null
+          country?: string | null
           email?: string
+          first_name?: string
           id?: number
-          name?: string
+          last_name?: string | null
+          phone_number?: string | null
+          state?: string | null
+          zip_code?: string | null
         }
         Relationships: []
       }

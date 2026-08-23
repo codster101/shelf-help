@@ -28,16 +28,19 @@ export default async function Home() {
           </div>
           <NewProductWrapper />
           <div className="px-5 w-full bg-background border-t-border border-t-1 h-full">
-            <div className="flex border-b-border border-b-1 text-xs font-semibold text-primary-foreground uppercase tracking-[.025em] p-2">
+            <div className="grid grid-cols-[.5fr_.25fr_.25fr] gap-2 items-center border-b-secondary border-b-1 p-2 border-b-border border-b-1 text-xs font-semibold text-primary-foreground uppercase tracking-[.025em] p-2">
               <p className="w-1/3">Product</p>
               <p className="w-1/3">Price</p>
               <p className="w-1/3">Quantity</p>
             </div>
             {data?.map((row) => (
-              <div key={row.id} className="flex border-b-secondary border-b-1 p-2">
-                <p className="w-1/3 font-medium text-[14px]">
-                  {row.product}
-                </p>
+              <div key={row.id} className="grid grid-cols-[.5fr_.25fr_.25fr] gap-2 items-center border-b-secondary border-b-1 p-2">
+                <div>
+                  <span className="w-1/3 font-medium text-[14px]">
+                    {row.product}
+                  </span>
+                  <span className='ml-5 text-primary-foreground font-xs italic'>{row.sku}</span>
+                </div>
                 <p className="w-1/3">
                   {row.price!.toLocaleString("en", { style: "currency", currency: "USD" })}
                 </p>

@@ -43,7 +43,7 @@ export function GetPriceSummary(order: Order) {
 	return {
 		subtotal: subtotal,
 		taxes: subtotal * 0.06,
-		shipping: 5.99,
+		shipping: 0.00,
 		total: (subtotal * 1.06) + 5.99
 	}
 }

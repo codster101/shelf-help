@@ -106,7 +106,7 @@ export default function OrderMenu({ closeMenu }: { closeMenu: () => void }) {
 	}
 
 	return (
-		<div className='absolute h-4/5 w-4/5 top-1/10 left-1/10 bg-card border-border border-1 border-radius-2 px-5'>
+		<div className='absolute h-4/5 w-7/10 top-1/10 left-1/10 bg-card border-border border-1 border-radius-2 px-5'>
 			<h1 className='my-5 text-3xl font-bold serif'>New Order</h1>
 			<label className='text-sm font-semibold'>
 				Date:
@@ -114,47 +114,60 @@ export default function OrderMenu({ closeMenu }: { closeMenu: () => void }) {
 			</label>
 			<br />
 
-			<CustomerSearch addToOrder={addCustomerToOrder} />
-			<div hidden={order.customer == undefined} className='border-1 border-border p-2 m-2 w-1/4'>
-				<h2 className='text-base font-semibold text-primary-foreground mono underline'>{order.customer?.name}</h2>
-				<p className='text-sm font-semibold text-primary-foreground'>Email: {order.customer?.email}</p>
-			</div>
-
-			<InventorySearch addToOrder={addItemToOrder} />
-			{order.items.length != 0 && <div className="mt-5 px-5 w-full bg-background border-t-border border-t-1">
-				{order.items.map((item) => (
-					<div key={item.id} className='flex border-b-secondary border-b-1 p-2'>
-						<p className='w-1/3 font-medium text-[14px]'>{item.product}</p>
-						<p className='w-1/3 mono text-[12px]'>{item.price!.toLocaleString("en", { style: "currency", currency: "USD" })}</p>
-						<input className='font-medium text-[14px]' type='number' name='quantity'
-							value={item.quantity!} onChange={(event) =>
-								updateQuantity(event, item.id)} />
-						<button className='ml-auto px-2 border-1 border-border bg-card hover:bg-background'
-							onClick={() => removeItemFromOrder(item)}>x</button>
+			<div className='grid grid-cols-1 lg:grid-cols-[1.6fr_1fr] gap-8 items-start'>
+				<div>
+					<CustomerSearch addToOrder={addCustomerToOrder} />
+					<div hidden={order.customer == undefined} className='border-1 border-border p-2 m-2'>
+						<h2 className='text-base font-semibold text-primary-foreground mono underline'>{order.customer?.name}</h2>
+						<p className='text-sm font-semibold text-primary-foreground'>{order.customer?.email}</p>
 					</div>
-				))}
-			</div>}
-			<br />
 
-			<div className='w-50 pl-2 border-1 border-border'>
-				<h2 className='text-xl serif underline'>Price Breakdown</h2>
-				<br />
-				<p className='text-sm/1 font-semibold'>Subtotal: {GetPriceSummary(order).subtotal.toLocaleString("en", { style: "currency", currency: "USD" })}</p>
-				<br />
-				<p className='text-sm/1 font-semibold'>+ Tax: {GetPriceSummary(order).taxes.toLocaleString("en", { style: "currency", currency: "USD" })} </p>
-				<br />
-				<p className='text-sm/1 font-semibold underline'>+ Shipping: {GetPriceSummary(order).shipping.toLocaleString("en", { style: "currency", currency: "USD" })}</p>
-				<br />
-				<p className='text-sm/1 font-semibold'>Total: {GetPriceSummary(order).total.toLocaleString("en", { style: "currency", currency: "USD" })}</p>
-				<br />
+					<InventorySearch addToOrder={addItemToOrder} />
+					{order.items.length != 0 && <div className="mt-5 px-5 w-full bg-background border-t-border border-t-1">
+						{order.items.map((item) => (
+							<div key={item.id} className='flex border-b-secondary border-b-1 p-2'>
+								<p className='w-1/3 font-medium text-[14px]'>{item.product}</p>
+								<p className='w-1/3 mono text-[12px]'>{item.price!.toLocaleString("en", { style: "currency", currency: "USD" })}</p>
+								<input className='font-medium text-[14px]' type='number' name='quantity'
+									value={item.quantity!} onChange={(event) =>
+										updateQuantity(event, item.id)} />
+								<button className='ml-auto size-6 border-1 border-border bg-card hover:bg-background '
+									onClick={() => removeItemFromOrder(item)}>x</button>
+							</div>
+						))}
+					</div>}
+					<br />
+				</div>
+
+				<div className='lg:sticky lg:top-6 w-full'>
+					<div className='w-50 pl-2 border-1 border-border w-full flex flex-col gap-3'>
+						<h2 className='text-xl serif underline'>Price Breakdown</h2>
+						<div className='flex flex-col gap-1.5'>
+							<div className='flex justify-between'>
+								<span className='text-sm/1 font-semibold'>Subtotal</span>
+								<span className='text-sm/1 font-semibold'>{GetPriceSummary(order).subtotal.toLocaleString("en", { style: "currency", currency: "USD" })}</span>
+							</div>
+							<div className='flex justify-between'>
+								<span className='text-sm/1 font-semibold'>Tax</span>
+								<span className='text-sm/1 font-semibold'>{GetPriceSummary(order).taxes.toLocaleString("en", { style: "currency", currency: "USD" })}</span>
+							</div>
+							<div className='flex justify-between'>
+								<span className='text-sm/1 font-semibold'>Shipping</span>
+								<span className='text-sm/1 font-semibold'>{GetPriceSummary(order).shipping.toLocaleString("en", { style: "currency", currency: "USD" })}</span>
+							</div>
+						</div>
+						<p className='text-sm/1 font-semibold'>Total: {GetPriceSummary(order).total.toLocaleString("en", { style: "currency", currency: "USD" })}</p>
+						<br />
+					</div>
+					<button
+						className='w-full my-2 p-2 font-medium text-[14px] border-1 border-border hover:bg-background'
+						onClick={submitOrder}
+					>
+						Add Order
+					</button>
+				</div>
 			</div>
 			<button className='absolute top-3 right-3 w-10 border-1 border-border hover:bg-background' onClick={() => { closeMenu() }}>X</button>
-			<button
-				className='my-2 p-2 border-1 border-border hover:bg-background'
-				onClick={submitOrder}
-			>
-				Add Order
-			</button>
 		</div>
 	);
 }

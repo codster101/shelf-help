@@ -1,4 +1,4 @@
-import { supabase } from "./database_connection"
+import { createClient } from "@/lib/supabase/server"
 
 type item = {
 	product: string
@@ -10,7 +10,8 @@ type item = {
 
 export const itemsOrderedManager = {
 	async addItems(items: item[], order_id: number) {
-		const result = await supabase.from('Items Ordered').insert(
+		const supabase = await createClient();
+		const { error } = await supabase.from('Items Ordered').insert(
 			items.map((item) => {
 				return {
 					product: item.product,
@@ -21,9 +22,15 @@ export const itemsOrderedManager = {
 					product_sku: item.sku
 				}
 			}));
-		return result
+		if (error) {
+			console.log(error);
+			console.log(error.message);
+			return error.message;
+		}
+		return "successful";
 	},
 	async getItemsFromOrder(order_id: number) {
+		const supabase = await createClient();
 		const { data, error } = await supabase.from('Items Ordered').select('*').eq('order_id', order_id);
 
 		if (error) {

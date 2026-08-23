@@ -39,7 +39,6 @@ export default async function Page() {
 	}
 
 
-	// <Link href="/orders/" className='w-full p-2 font-semibold hover:bg-background'>Customers</Link>
 	return (
 		<>
 			<div className='flex h-screen bg-card'>
@@ -48,6 +47,7 @@ export default async function Page() {
 					<div className=' flex flex-col border-b-border border-b-1'>
 						<Link href="/inventory" className='w-full p-2 font-semibold hover:bg-background'>Inventory</Link>
 						<Link href="/orders/" className='w-full p-2 bg-background font-semibold'>Orders</Link>
+						<Link href="/customers/" className='w-full p-2 font-semibold hover:bg-background'>Customers</Link>
 					</div>
 					<NewOrderWrapper />
 				</div>
@@ -56,10 +56,10 @@ export default async function Page() {
 						<h1 className="font-serif text-2xl/[1.2] font-semibold text-foreground">Orders</h1>
 					</div>
 					<div className="px-5 w-full bg-background border-t-border border-t-1 h-full">
-						<div className="flex border-b-border border-b-1 text-xs font-semibold text-primary-foreground uppercase tracking-[.025em] p-2">
-							<p className="w-1/3">Customer</p>
-							<p className="w-1/3">Date</p>
-							<p className="w-1/3">Total</p>
+						<div className="grid grid-cols-[.5fr_.25fr_.25fr] gap-2 items-center border-b-secondary border-b-1 p-2 border-b-border border-b-1 text-xs font-semibold text-primary-foreground uppercase tracking-[.025em] p-2">
+							<p className="">Customer</p>
+							<p className="">Date</p>
+							<p className="">Total</p>
 						</div>
 						<OrderTable orders={orderDisplays} />
 					</div>

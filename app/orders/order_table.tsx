@@ -11,19 +11,21 @@ export function OrderTable({ orders }: { orders: Order[] }) {
 			{orders.map((order) => {
 				let isExpanded = expandedId == order.id;
 				return (
-					<div key={order.id} className="flex flex-col border-b-secondary border-b-1 p-2">
-						<div className='flex'>
-							<button className='px-1 font-semibold text-primary-foreground'
-								onClick={() => setExpandedId(isExpanded ? null : order.id!)}>
-								<span className=""> ▶</span>
-							</button>
-							<p className="w-1/3 font-medium text-[14px]">
-								{customerName(order.customer!)}
-							</p>
-							<p className="w-1/3">
+					<div key={order.id} className="grid grid-cols-[1fr] gap-2 items-center border-b-secondary border-b-1 p-2">
+						<div className='grid grid-cols-[.5fr_.25fr_.25fr] gap-2 items-center border-b-secondary border-b-1 p-2'>
+							<div className="flex">
+								<button className='px-1 font-semibold text-primary-foreground'
+									onClick={() => setExpandedId(isExpanded ? null : order.id!)}>
+									<span className=""> ▶</span>
+								</button>
+								<p className="font-medium text-[14px]">
+									{customerName(order.customer!)}
+								</p>
+							</div>
+							<p className="">
 								{order.date_ordered}
 							</p>
-							<p className="w-1/3">
+							<p className="">
 								{GetPriceSummary(order).total.toLocaleString("en",
 									{ style: "currency", currency: "USD" }
 								)}
